@@ -16,33 +16,34 @@ mongoose.connect(process.env.MONGODB_URI, {
     useUnifiedTopology: true
 })
 .then(() => console.log('Connected to MongoDB'))
-.catch(err => console.log( err));
-//schema
-const userSchema = new mongoose.Schema({
+.catch(err => console.log(err));
+
+const contactSchema = new mongoose.Schema({
     name: String,
     email: String,
     subject: String,
     message: String
 });
 
-const User = mongoose.model('Contact', ContactSchema);
+const Contact = mongoose.model('Contact', contactSchema);
 
 app.post('/submit-form', async (req, res) => {
     const { name, email, subject, message } = req.body;
 
-    try{
-       const newMessage = new Contact({name, email, subject, message});
-       await newMessage.save();
-       res.status(200).json({message: 'Message submitted successfully'});
-    }catch(error){
+    try {
+        const newMessage = new Contact({name, email, subject, message});
+        await newMessage.save();
+        res.status(200).json({message: 'Message submitted successfully'});
+    } catch(error) {
+        console.error(error);
         res.status(500).json({message: 'Something went wrong'});
     }
 });
-//server
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
 
-    
+
